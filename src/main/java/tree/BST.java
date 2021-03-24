@@ -69,4 +69,110 @@ public class BST<E extends Comparable<E>> {
         }
         return node;
     }
+    public boolean contains(E e){
+        return contains(root, e);
+    }
+    private boolean contains(Node node, E e){
+        if(node == null){
+            return false;
+        }
+        if(e.compareTo(node.e) == 0){
+            return true;
+        }else if(e.compareTo(node.e) < 0){
+            return contains(node.left, e);
+        }else{
+            return contains(node.right, e);
+        }
+    }
+
+    public E minimum(){
+        if(isEmpty()){
+            throw new IllegalArgumentException("The BST is empty.");
+        }
+        return minimum(root).e;
+    }
+    private Node minimum(Node node){
+        if(node.left == null){
+            return node;
+        }
+        return minimum(node.left);
+    }
+    public E maximum(){
+        if(isEmpty()){
+            throw new IllegalArgumentException("The BST is empty.");
+        }
+        return maximum(root).e;
+    }
+    private Node maximum(Node node){
+        if(node.right == null){
+            return node;
+        }
+        return minimum(node.right);
+    }
+
+    public E removeMin(){
+        E ret = minimum();
+        root = removeMin(root);
+        return ret;
+    }
+    private Node removeMin(Node node){
+        if(node.left == null){
+            Node rightNode = node.right;
+            node.right = null;
+            -- size;
+            return rightNode;
+        }
+        node.left = removeMin(node.left);
+        return node;
+    }
+
+    public E removeMax(){
+        E ret = maximum();
+        root = removeMax(root);
+        return ret;
+    }
+    private Node removeMax(Node node){
+        if(node.right == null){
+            Node nodeLeft = node.left;
+            node.left = null;
+            -- size;
+            return nodeLeft;
+        }
+        node.right = removeMax(node.right);
+        return node;
+    }
+
+    public void remove(E e){
+        remove(root, e);
+    }
+    private Node remove(Node node, E e){
+        if(node == null){
+            return null;
+        }
+        if(e.compareTo(node.e) < 0){
+            node.left = remove(node.left, e);
+        }else if(e.compareTo(node.e) > 0){
+            node.right = remove(node.right, e);
+        }else{
+            if(node.left == null){
+                Node rightNode = node.right;
+                node.right = null;
+                -- size;
+                return rightNode;
+            }
+            if(node.right == null){
+                Node leftNode = node.left;
+                node.left = null;
+                -- size;
+                return leftNode;
+            }
+            // 删除任意节点
+            Node successor = minimum(node.right);
+            successor.right = removeMin(node.right); // size-- 已经执行了
+            successor.left = node.left;
+            node.left = node.right = null;
+            return successor;
+        }
+        return node;
+    }
 }

@@ -1,17 +1,18 @@
+import map.LinkedListMap;
+import set.BSTSet;
+import set.LinkedListSet;
 import stack.LinkedStack;
 
 public class Main {
 
     public static void main(String[] args) {
-        LinkedStack<Integer> stack = new LinkedStack<>();
-        for(int i = 0; i < 5; ++ i){
-            stack.push(i);
-//            System.out.println(stack);
+        LinkedListMap<String, Integer> map = new LinkedListMap<>();
+        for(int i = 1; i < 10; ++ i){
+            map.add(String.valueOf(i), i);
         }
-        System.out.println(stack);
-        while(! stack.isEmpty()){
-            System.out.println(stack.pop());
-            System.out.println(stack);
+        System.out.println(map.getSize());
+        for(int i = 1; i < 10; ++ i){
+            System.out.println(i + ":" + map.get(String.valueOf(i)));
         }
     }
 }

@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="JavaDataStruct" />
+        <module name="java-data-struct" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8" />

@@ -149,6 +149,15 @@ public class Array <E>{
         this.data = newData;
     }
 
+    public void swap(int i, int j){
+        if(i < 0 || i >= size || j < 0 || j >= size){
+            throw new IllegalArgumentException("The index is out of boundary.");
+        }
+        E temp = data[i];
+        data[i] = data[j];
+        data[j] = temp;
+    }
+
     @Override
     public String toString() {
         return "Arrays.Array{" +

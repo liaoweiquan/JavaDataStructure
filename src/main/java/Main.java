@@ -1,18 +1,19 @@
+import heap.MaxHeap;
 import map.LinkedListMap;
 import set.BSTSet;
 import set.LinkedListSet;
 import stack.LinkedStack;
+import tree.Merger;
+import tree.SegmentTree;
+
+import java.util.Random;
 
 public class Main {
 
     public static void main(String[] args) {
-        LinkedListMap<String, Integer> map = new LinkedListMap<>();
-        for(int i = 1; i < 10; ++ i){
-            map.add(String.valueOf(i), i);
-        }
-        System.out.println(map.getSize());
-        for(int i = 1; i < 10; ++ i){
-            System.out.println(i + ":" + map.get(String.valueOf(i)));
-        }
+        Integer[] nums = {-2, 0, 3, -5, 2, -1};
+        SegmentTree<Integer> segTree = new SegmentTree<>(nums, Integer::sum);
+        System.out.println(segTree);
+
     }
 }

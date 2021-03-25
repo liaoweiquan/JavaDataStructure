@@ -45,7 +45,29 @@ public class SegmentTree<E> {
         return data[index];
     }
 
-//    public E
+    public E query(int queryL, int queryR){
+        if(queryL < 0 || queryL >= data.length || queryR < 0 || queryR >= data.length || queryL > queryR){
+            throw new IllegalArgumentException("The query params is out of boundary.");
+        }
+        return query(0, 0, data.length - 1, queryL, queryR);
+    }
+    private E query(int treeIndex, int l, int r, int queryL, int queryR){
+        if(l == queryL && r == queryR){
+            return tree[treeIndex];
+        }
+        int mid = (r - l) / 2 + l;
+        int leftTreeIndex = leftChild(treeIndex);
+        int rightTreeIndex = rightChild(treeIndex);
+        if(queryL >= mid + 1){
+            return query(rightTreeIndex, mid + 1, r, queryL, queryR);
+        }else if(queryR <= mid){
+            return query(leftTreeIndex, l, mid, queryL, queryR);
+        }else{
+            E leftResult = query(leftTreeIndex, l, mid, queryL, mid);
+            E rightResult = query(rightTreeIndex, mid + 1, r, mid + 1, queryR);
+            return merger.merge(leftResult, rightResult);
+        }
+    }
 
     private int leftChild(int index){
         return 2 * index + 1;

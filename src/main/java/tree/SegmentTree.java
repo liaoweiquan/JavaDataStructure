@@ -33,6 +33,29 @@ public class SegmentTree<E> {
         tree[treeIndex] = merger.merge(tree[leftTreeIndex] , tree[rightTreeIndex]);
     }
 
+    public void set(int index, E e){
+        if(index < 0 || index >= data.length){
+            throw new IllegalArgumentException("The index is out of boundary.");
+        }
+        data[index] = e;
+        set(0, 0, data.length - 1, index, e);
+    }
+    private void set(int treeIndex, int l, int r, int index, E e){
+        if(l == r){
+            tree[treeIndex] = e;
+            return;
+        }
+        int mid = l + (r - l) / 2;
+        int leftTreeIndex = leftChild(treeIndex);
+        int rightTreeIndex = rightChild(treeIndex);
+        if(index >= mid + 1){
+            set(rightTreeIndex, mid + 1, r, index, e);
+        }else if(index <= mid){
+            set(leftTreeIndex, l, mid, index, e);
+        }
+        tree[treeIndex] = merger.merge(tree[leftTreeIndex], tree[rightTreeIndex]);
+    }
+
 
     public int getSize(){
         return data.length;

@@ -2,7 +2,7 @@ package set;
 
 import tree.BST;
 
-public class BSTSet<E  extends  Comparable<E>> implements Set<E>{
+public class BSTSet<E extends  Comparable<E>> implements Set<E>{
 
     private BST<E> bst;
 

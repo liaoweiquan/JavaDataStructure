@@ -1,29 +1,34 @@
-package map;
+package tree;
 
-import tree.BST;
+import com.sun.org.apache.regexp.internal.RE;
 
-public class BSTMap<K extends Comparable<K>, V> implements Map<K, V>{
+public class RBTree<K extends Comparable<K>, V> {
+    private static final boolean RED = true;
+    private static final boolean BLACK = false;
     private class Node{
         public K key;
         public V value;
         public Node left, right;
+        public boolean color;
         public Node(K key, V value){
             this.key = key;
             this.value = value;
             this.left = null;
             this.right = null;
+            this.color = RED; // 默认新节点是红色
         }
     }
     private Node root;
     private int size;
 
-    @Override
     public void add(K key, V value) {
         add(root, key, value);
+        root.color = BLACK;
     }
 
     private Node add(Node node, K key, V value){
         if(node == null){
+            // RBTree中添加一个新元素 默认插入红色节点
             ++ size;
             return new Node(key, value);
         }else{
@@ -35,15 +40,61 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V>{
                 node.value = value;
             }
         }
+        if(isRed(node.left) && ! isRed(node.right)){
+            node = leftRotate(node);
+        }
+        if(isRed(node.left) && isRed(node.left.left)){
+            node = rightRotate(node);
+        }
+        if(isRed(node.left) && isRed(node.right)){
+            flipColors(node);
+        }
         return node;
     }
 
-    @Override
+
+    /**
+     * 左旋转
+     * x的颜色<-node的颜色
+     * node颜色<-红色
+     * 2-结点转换成3-节点 or 3-结点转换成临时4-节点
+     * @param node
+     * @return
+     */
+    private Node leftRotate(Node node){
+        Node x = node.right;
+        node.right = x.left;
+        x.left = node;
+        x.color = node.color;
+        node.color = RED;
+        return x;
+    }
+
+    /**
+     * 右旋转
+     * @param node
+     * @return
+     */
+    private Node rightRotate(Node node){
+        Node x = node.left;
+        node.left = x.right;
+        x.right = node;
+        x.color = node.color;
+        node.color = RED;
+        return x;
+    }
+    private boolean isRed(Node node){
+        return node != null && node.color == RED;
+    }
+    private void flipColors(Node node){
+        node.color = node.color == BLACK ? RED : BLACK;
+    }
     public V remove(K key) {
         Node node = remove(root, key);
         return node == null ? null : node.value;
     }
 
+    // BST的删除
     private Node remove(Node node, K key){
         if(node == null){
             return null;
@@ -73,7 +124,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V>{
             node.left = node.right = null;
             return successorNode;
         }
-//        return node;
     }
     private Node minimum(Node node){
         if(node.left == null){
@@ -106,32 +156,27 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V>{
     }
 
 
-    @Override
     public boolean contains(K key) {
         return getNode(root, key) != null;
     }
 
-    @Override
     public V get(K key) {
         Node node = getNode(root, key);
         return node == null ? null : node.value;
     }
 
-    @Override
     public void set(K key, V newValue) {
         Node node = getNode(root, key);
         if(node == null){
-            throw new IllegalArgumentException("The key is not exists in the BSTMap.");
+            throw new IllegalArgumentException("The key is not exists in the RBTree.");
         }
         node.value = newValue;
     }
 
-    @Override
     public int getSize() {
         return size;
     }
 
-    @Override
     public boolean isEmpty() {
         return size == 0;
     }
